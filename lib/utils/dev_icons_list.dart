@@ -3,43 +3,66 @@ import 'package:dev_icons/dev_icons.dart';
 
 class DevIconsUtils {
   static final List<String> devIcons = [
-    'flutterPlain',
-    'reactOriginal',
-    'angularjsPlain',
-    'vuejsPlain',
-    'nodejsPlain',
-    'pythonPlain',
-    'javaPlain',
-    'kotlinPlain',
-    'swiftPlain',
-    'javascriptPlain',
-    'typescriptPlain',
-    'goPlain',
-    'rustPlain',
-    'dartPlain',
-    'cPlain',
-    'cplusplusPlain',
-    'csharpPlain',
-    'phpPlain',
-    'rubyPlain',
-    'perlPlain',
-    'mysqlPlain',
-    'postgresqlPlain',
-    'mongodbPlain',
-    'firebasePlain',
-    'electronOriginal',
-    'html5Plain',
-    'css3Plain',
-    'sassOriginal',
-    'bootstrapPlain',
-    'figmaPlain',
-    'luaPlain',
-    'nestjsPlain',
-    'expressOriginal',
-    'djangoPlain',
-    'laravelPlain',
-    'springPlain',
-    'rPlain',
+    // Most Popular Languages
+    'pythonPlain', // Data Science, AI, Web, Versatile
+    'javascriptPlain', // Web Development
+    'typescriptPlain', // Modern Web Development
+    'javaPlain', // Enterprise, Android
+    'csharpPlain', // Windows, Game Development
+    'cplusplusPlain', // System Programming, Game Development
+    'cPlain', // Low-level Programming
+    'scalaPlain', // Scala
+
+    // Web Frameworks
+    'angularjsPlain', // Web Frontend
+    'vuejsPlain', // Web Frontend
+    'nestjsPlain', // Backend Framework
+    'expressOriginal', // Backend Framework
+    'djangoPlain', // Python Web Framework
+    'laravelPlain', // PHP Web Framework
+    'springPlain', // Java Web Framework
+    'flaskOriginal', // Python Web Framework
+
+    // Web and Mobile Frameworks
+    'reactOriginal', // Web Frontend
+    'flutterPlain', // Cross-platform Mobile
+    'nodejsPlain', // Backend JavaScript
+    'dartPlain', // Flutter Language
+    'kotlinPlain', // Modern Android
+    'swiftPlain', // iOS Development
+    'objectivecPlain', // Objective-C
+    'nextjsOriginal', // Next.js
+
+    // Other Popular Languages
+    'goPlain', // Systems Programming, Cloud
+    'rustPlain', // Systems Programming, Safety
+    'phpPlain', // Web Backend
+    'rubyPlain', // Web Backend
+
+    // Web Technologies
+    'html5Plain', // Web Structure
+    'css3Plain', // Web Styling
+    'sassOriginal', // CSS Preprocessor
+    'bootstrapPlain', // Frontend Framework
+
+    // Databases and Backend
+    'mysqlPlain', // Relational Database
+    'postgresqlPlain', // Advanced Relational Database
+    'mongodbPlain', // NoSQL Database
+    'firebasePlain', // Backend as a Service
+
+    // Other Technologies
+    'electronOriginal', // Desktop Apps
+    'figmaPlain', // Design Tool
+    'matlabPlain', // Math
+    'xdPlain', // Design Tool
+    'illustratorPlain', // Design Tool
+    'photoshopPlain', // Design Tool
+
+    // Less Common Languages
+    'perlPlain', // Text Processing
+    'luaPlain', // Scripting
+    'rPlain', // Statistical Computing
   ];
 
   static IconData getDevIconFromString(String icon) {
@@ -118,6 +141,24 @@ class DevIconsUtils {
         return DevIcons.springPlain;
       case 'rPlain':
         return DevIcons.rPlain;
+      case 'matlabPlain':
+        return DevIcons.matlabPlain;
+      case 'groovyPlain':
+        return DevIcons.groovyPlain;
+      case 'flaskOriginal':
+        return DevIcons.flaskOriginal;
+      case 'objectivecPlain':
+        return DevIcons.objectivecPlain;
+      case 'scalaPlain':
+        return DevIcons.scalaPlain;
+      case 'nextjsOriginal':
+        return DevIcons.nextjsOriginal;
+      case 'photoshopPlain':
+        return DevIcons.photoshopPlain;
+      case 'illustratorPlain':
+        return DevIcons.illustratorPlain;
+      case 'xdPlain':
+        return DevIcons.xdPlain;
       default:
         return Icons.code;
     }

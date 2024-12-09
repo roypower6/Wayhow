@@ -72,88 +72,208 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => Get.back(),
+        ),
         title: Text(
           widget.initialIdea == null ? '새 아이디어 추가' : '아이디어 수정',
           style: TextStyle(
             color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
-          TextButton(
-            onPressed: _saveIdea,
-            child: Text(
-              widget.initialIdea == null ? '추가' : '수정',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ElevatedButton(
+              onPressed: _saveIdea,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColor,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              child: Text(
+                widget.initialIdea == null ? '추가' : '수정',
+                style: TextStyle(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: textController,
-              decoration: InputDecoration(
-                labelText: '아이디어 제목',
-                hintText: '아이디어를 간단히 설명해주세요',
-                border: const OutlineInputBorder(),
-                suffixIcon: textController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () => textController.clear(),
-                      )
-                    : null,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildSectionTitle(context, '아이디어 제목'),
+              _buildAnimatedTextField(
+                controller: textController,
+                hintText: '핵심 기능이나 목적을 한 문장으로 요약해 주세요.',
+                context: context,
               ),
-              onChanged: (value) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: descriptionController,
-              decoration: const InputDecoration(
-                labelText: '상세 설명',
-                hintText: '아이디어에 대한 자세한 내용을 적어주세요',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              _buildSectionTitle(context, '상세 설명'),
+              _buildAnimatedTextField(
+                controller: descriptionController,
+                hintText: '아이디어의 구체적인 내용을 설명해 주세요',
+                maxLines: 4,
+                context: context,
               ),
-              maxLines: 4,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: selectedCategory.isEmpty ? null : selectedCategory,
-              decoration: const InputDecoration(
-                labelText: '카테고리',
-                border: OutlineInputBorder(),
+              const SizedBox(height: 16),
+              _buildSectionTitle(context, '카테고리'),
+              _buildCategoryDropdown(context),
+              const SizedBox(height: 16),
+              _buildSectionTitle(context, '기술 아이콘'),
+              DevIconPicker(
+                selectedDevIcons: selectedDevIcons,
+                onIconsSelected: (icons) {
+                  setState(() {
+                    selectedDevIcons = icons;
+                  });
+                },
               ),
-              hint: const Text('카테고리를 선택해주세요'),
-              items: predefinedCategories.map((category) {
-                return DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value!;
-                });
-              },
-            ),
-            const SizedBox(height: 16),
-            DevIconPicker(
-              selectedDevIcons: selectedDevIcons,
-              onIconsSelected: (icons) {
-                setState(() {
-                  selectedDevIcons = icons;
-                });
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Theme.of(context).primaryColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimatedTextField({
+    required TextEditingController controller,
+    required String hintText,
+    int maxLines = 1,
+    required BuildContext context,
+  }) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        return TextField(
+          controller: controller,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hintText,
+            labelStyle: TextStyle(
+              color: controller.text.isNotEmpty
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(
+                color: controller.text.isNotEmpty
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(
+                color: controller.text.isNotEmpty
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey.shade300,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor,
+                width: 2,
+              ),
+            ),
+            suffixIcon: controller.text.isNotEmpty
+                ? IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () => controller.clear(),
+                  )
+                : null,
+          ),
+          onChanged: (value) => setState(() {}),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCategoryDropdown(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      value: selectedCategory.isEmpty ? null : selectedCategory,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: selectedCategory.isNotEmpty
+                ? Theme.of(context).primaryColor
+                : Colors.grey.shade300,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            color: Theme.of(context).primaryColor,
+            width: 2,
+          ),
+        ),
+      ),
+      hint: Text(
+        '카테고리를 선택해주세요',
+        style: TextStyle(color: Colors.grey.shade600),
+      ),
+      icon: Icon(
+        Icons.arrow_drop_down_rounded,
+        color: Theme.of(context).primaryColor,
+      ),
+      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+      items: predefinedCategories.map((category) {
+        return DropdownMenuItem(
+          value: category,
+          child: Text(
+            category,
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          selectedCategory = value!;
+        });
+      },
     );
   }
 }
