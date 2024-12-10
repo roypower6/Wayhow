@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wayhow/controllers/ideas_controller.dart';
 import 'package:wayhow/models/idea_model.dart';
-import 'package:wayhow/widgets/dev_icon_picker.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/dev_icon_picker.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/idea_description.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/section_title.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/category_dropdown.dart';
+import 'package:wayhow/utils/idea_categories.dart' as predefined_categories;
 
 class AddIdeaScreen extends StatefulWidget {
   final IdeaModel? initialIdea;
@@ -17,23 +21,10 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
   late TextEditingController textController;
   late TextEditingController descriptionController;
   String selectedCategory = '';
-  List<String> selectedDevIcons = []; // 여러 아이콘을 지원하도록 변경
+  List<String> selectedDevIcons = [];
 
-  final List<String> predefinedCategories = [
-    '모바일 앱',
-    '데스크탑 프로그램',
-    '웹',
-    '백엔드',
-    '프론트엔드',
-    '알고리즘',
-    '인공지능',
-    '게임',
-    '보안',
-    '데이터분석',
-    '임베디드',
-    'API',
-    '기타',
-  ];
+  final List<String> predefinedCategories =
+      predefined_categories.predefinedCategories;
 
   @override
   void initState() {
@@ -44,7 +35,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       text: widget.initialIdea?.description ?? '',
     );
     selectedCategory = widget.initialIdea?.category ?? '';
-    selectedDevIcons = widget.initialIdea?.icons ?? []; // 기존 아이콘 불러오기
+    selectedDevIcons = widget.initialIdea?.icons ?? [];
   }
 
   void _saveIdea() {
@@ -60,7 +51,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       description: descriptionController.text.trim(),
       category: selectedCategory,
       isFavorite: widget.initialIdea?.isFavorite ?? false,
-      icons: selectedDevIcons, // 여러 아이콘 저장
+      icons: selectedDevIcons,
     );
 
     if (widget.initialIdea == null) {
@@ -69,7 +60,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       ideasController.updateIdea(idea);
     }
 
-    Get.back(); // Return to previous screen
+    Get.back();
   }
 
   void _showValidationDialog() {
@@ -143,25 +134,34 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildSectionTitle(context, '아이디어 제목 (필수)'),
-              _buildAnimatedTextField(
+              const SectionTitle(title: '아이디어 제목 (필수)'),
+              IdeaDescription(
                 controller: textController,
                 hintText: '핵심 기능이나 목적을 한 문장으로 요약해 주세요.',
-                context: context,
               ),
               const SizedBox(height: 16),
-              _buildSectionTitle(context, '상세 설명'),
-              _buildAnimatedTextField(
+              const SectionTitle(title: '상세 설명'),
+              IdeaDescription(
                 controller: descriptionController,
                 hintText: '아이디어의 구체적인 내용을 설명해 주세요.',
                 maxLines: 4,
-                context: context,
               ),
               const SizedBox(height: 16),
-              _buildSectionTitle(context, '카테고리 (필수)'),
-              _buildCategoryDropdown(context),
+              const SectionTitle(title: '카테고리 (필수)'),
+              CategoryDropdown(
+                selectedCategory:
+                    selectedCategory.isEmpty ? null : selectedCategory,
+                predefinedCategories: predefinedCategories,
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value ??
+                        predefinedCategories
+                            .first; // Handle null case and set default value
+                  });
+                },
+              ),
               const SizedBox(height: 16),
-              _buildSectionTitle(context, '개발 언어'),
+              const SectionTitle(title: '개발 언어'),
               DevIconPicker(
                 selectedDevIcons: selectedDevIcons,
                 onIconsSelected: (icons) {
@@ -174,130 +174,6 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSectionTitle(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAnimatedTextField({
-    required TextEditingController controller,
-    required String hintText,
-    int maxLines = 1,
-    required BuildContext context,
-  }) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return TextField(
-          controller: controller,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hintText,
-            labelStyle: TextStyle(
-              color: controller.text.isNotEmpty
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: controller.text.isNotEmpty
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: controller.text.isNotEmpty
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey.shade300,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: Theme.of(context).primaryColor,
-                width: 2,
-              ),
-            ),
-            suffixIcon: controller.text.isNotEmpty
-                ? IconButton(
-                    icon: Icon(
-                      Icons.clear,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => controller.clear(),
-                  )
-                : null,
-          ),
-          onChanged: (value) => setState(() {}),
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildCategoryDropdown(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: selectedCategory.isEmpty ? null : selectedCategory,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(
-            color: selectedCategory.isNotEmpty
-                ? Theme.of(context).primaryColor
-                : Colors.grey.shade300,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: 2,
-          ),
-        ),
-      ),
-      hint: Text(
-        '카테고리를 선택해주세요',
-        style: TextStyle(color: Colors.grey.shade600),
-      ),
-      icon: Icon(
-        Icons.arrow_drop_down_rounded,
-        color: Theme.of(context).primaryColor,
-      ),
-      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-      items: predefinedCategories.map((category) {
-        return DropdownMenuItem(
-          value: category,
-          child: Text(
-            category,
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-        );
-      }).toList(),
-      onChanged: (value) {
-        setState(() {
-          selectedCategory = value!;
-        });
-      },
     );
   }
 }

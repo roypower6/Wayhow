@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wayhow/utils/dev_icons_list.dart';
+import 'package:wayhow/utils/dev_icon_categories.dart';
 
 class DevIconPicker extends StatefulWidget {
   final List<String> selectedDevIcons;
   final Function(List<String>) onIconsSelected;
 
-  const DevIconPicker(
-      {super.key,
-      required this.selectedDevIcons,
-      required this.onIconsSelected});
+  const DevIconPicker({
+    super.key,
+    required this.selectedDevIcons,
+    required this.onIconsSelected,
+  });
 
   @override
   DevIconPickerState createState() => DevIconPickerState();
@@ -18,71 +20,7 @@ class DevIconPickerState extends State<DevIconPicker> {
   late List<String> selectedDevIcons;
   String _selectedCategory = 'All'; // Default category
 
-  // Define icon categories
-  final Map<String, List<String>> _iconCategories = {
-    'All': DevIconsUtils.devIcons,
-    'Languages': [
-      'pythonPlain',
-      'javascriptPlain',
-      'typescriptPlain',
-      'javaPlain',
-      'csharpPlain',
-      'cplusplusPlain',
-      'cPlain',
-      'kotlinPlain',
-      'swiftPlain',
-      'dartPlain',
-      'goPlain',
-      'rustPlain',
-      'phpPlain',
-      'rubyPlain',
-      'perlPlain',
-      'luaPlain',
-      'rPlain',
-      'scalaPlain',
-      'objectivecPlain'
-    ],
-    'Web Frontend': [
-      'reactOriginal',
-      'angularjsPlain',
-      'vuejsPlain',
-      'html5Plain',
-      'css3Plain',
-      'sassOriginal',
-      'bootstrapPlain'
-    ],
-    'Web Backend': [
-      'nodejsPlain',
-      'nestjsPlain',
-      'nextjsOriginal',
-      'expressOriginal',
-      'djangoPlain',
-      'laravelPlain',
-      'springPlain',
-      'flaskOriginal'
-    ],
-    'Mobile': [
-      'flutterPlain',
-      'kotlinPlain',
-      'swiftPlain',
-      'objectivecPlain',
-      'dartPlain'
-    ],
-    'Databases': [
-      'mysqlPlain',
-      'postgresqlPlain',
-      'mongodbPlain',
-      'firebasePlain'
-    ],
-    'Other Technologies': [
-      'electronOriginal',
-      'figmaPlain',
-      'matlabPlain',
-      'xdPlain',
-      'illustratorPlain',
-      'photoshopPlain'
-    ]
-  };
+  final Map<String, List<String>> _iconCategories = devIconCategories;
 
   @override
   void initState() {
@@ -96,7 +34,6 @@ class DevIconPickerState extends State<DevIconPicker> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        //개발 아이콘 선택 하단 스크롤바
         return DraggableScrollableSheet(
           expand: false,
           snap: true,
@@ -120,7 +57,6 @@ class DevIconPickerState extends State<DevIconPicker> {
               ),
               child: StatefulBuilder(
                 builder: (context, setState) {
-                  // Get the current category's icons
                   final categoryIcons = _iconCategories[_selectedCategory] ??
                       DevIconsUtils.devIcons;
 
@@ -205,47 +141,40 @@ class DevIconPickerState extends State<DevIconPicker> {
                               final icon = categoryIcons[index];
                               final isSelected =
                                   selectedDevIcons.contains(icon);
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.1)
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (isSelected) {
+                                      selectedDevIcons.remove(icon);
+                                    } else {
+                                      selectedDevIcons.add(icon);
+                                    }
+                                    widget.onIconsSelected(selectedDevIcons);
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.1)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    DevIconsUtils.getDevIconFromString(icon),
+                                    size: 50,
                                     color: isSelected
                                         ? Theme.of(context).primaryColor
-                                        : Colors.transparent,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(15),
-                                    onTap: () {
-                                      setState(() {
-                                        if (isSelected) {
-                                          selectedDevIcons.remove(icon);
-                                        } else {
-                                          selectedDevIcons.add(icon);
-                                        }
-                                      });
-                                    },
-                                    child: Center(
-                                      child: Icon(
-                                        DevIconsUtils.getDevIconFromString(
-                                            icon),
-                                        size: 50,
-                                        color: isSelected
-                                            ? Theme.of(context).primaryColor
-                                            : Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(0.6),
-                                      ),
-                                    ),
+                                        : Theme.of(context)
+                                            .primaryColor
+                                            .withOpacity(0.6),
                                   ),
                                 ),
                               );

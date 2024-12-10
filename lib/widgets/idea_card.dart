@@ -166,11 +166,19 @@ class IdeaCard extends StatelessWidget {
                         ],
                       ),
                       if (idea.icons.isNotEmpty)
-                        Icon(
-                          DevIconsUtils.getDevIconFromString(idea.icons.first),
-                          size: 20,
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.7),
+                        Row(
+                          children: idea.icons.map((icon) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Icon(
+                                DevIconsUtils.getDevIconFromString(icon),
+                                size: 20,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.7),
+                              ),
+                            );
+                          }).toList(),
                         ),
                     ],
                   ),

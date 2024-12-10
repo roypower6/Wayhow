@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:wayhow/controllers/ideas_controller.dart';
 import 'package:wayhow/screens/add_idea_screen.dart';
 import 'package:wayhow/widgets/idea_card.dart';
-import 'package:wayhow/widgets/left_drawer_widget.dart';
+import 'package:wayhow/widgets/left_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

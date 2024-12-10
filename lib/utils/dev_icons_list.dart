@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dev_icons/dev_icons.dart';
 
+// 개발 아이콘 리스트
 class DevIconsUtils {
   static final List<String> devIcons = [
     // Most Popular Languages
