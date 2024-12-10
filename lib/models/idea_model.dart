@@ -3,7 +3,6 @@ class IdeaModel {
   final String title;
   final String description;
   final String category;
-  final DateTime createdAt;
   final List<String> tags;
   final bool isFavorite;
   final List<String> icons;
@@ -13,11 +12,10 @@ class IdeaModel {
     required this.title,
     this.description = '',
     this.category = 'General',
-    DateTime? createdAt,
     this.tags = const [],
     this.isFavorite = false,
     this.icons = const [],
-  }) : createdAt = createdAt ?? DateTime.now();
+  });
 
   // Create a copy of the idea with optional modifications
   IdeaModel copyWith({
@@ -25,7 +23,6 @@ class IdeaModel {
     String? title,
     String? description,
     String? category,
-    DateTime? createdAt,
     List<String>? tags,
     bool? isFavorite,
     List<String>? icons,
@@ -35,7 +32,6 @@ class IdeaModel {
       title: title ?? this.title,
       description: description ?? this.description,
       category: category ?? this.category,
-      createdAt: createdAt ?? this.createdAt,
       tags: tags ?? this.tags,
       isFavorite: isFavorite ?? this.isFavorite,
       icons: icons ?? this.icons,
@@ -49,7 +45,6 @@ class IdeaModel {
       'title': title,
       'description': description,
       'category': category,
-      'createdAt': createdAt.toIso8601String(),
       'tags': tags,
       'isFavorite': isFavorite,
       'icons': icons,
@@ -63,7 +58,6 @@ class IdeaModel {
       title: json['title'],
       description: json['description'] ?? '',
       category: json['category'] ?? 'General',
-      createdAt: DateTime.parse(json['createdAt']),
       tags: List<String>.from(json['tags'] ?? []),
       isFavorite: json['isFavorite'] ?? false,
       icons: List<String>.from(json['icons'] ?? []),

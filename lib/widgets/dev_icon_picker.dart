@@ -96,10 +96,13 @@ class DevIconPickerState extends State<DevIconPicker> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (BuildContext context) {
+        //개발 아이콘 선택 하단 스크롤바
         return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          minChildSize: 0.8,
-          maxChildSize: 0.8,
+          expand: false,
+          snap: true,
+          initialChildSize: 0.6,
+          minChildSize: 0.6,
+          maxChildSize: 0.6,
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
@@ -299,9 +302,11 @@ class DevIconPickerState extends State<DevIconPicker> {
                 widget.selectedDevIcons.isEmpty
                     ? '선택한 언어 없음'
                     : '선택된 언어(${widget.selectedDevIcons.length})',
-                style: Theme.of(context).textTheme.bodyLarge,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).primaryColor,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             TextButton.icon(
@@ -313,32 +318,60 @@ class DevIconPickerState extends State<DevIconPicker> {
         ),
         const SizedBox(height: 16),
         if (widget.selectedDevIcons.isNotEmpty)
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: widget.selectedDevIcons.map((icon) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Column(
-                    children: [
-                      Icon(
-                        DevIconsUtils.getDevIconFromString(icon),
-                        size: 50,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.red),
-                        onPressed: () {
-                          setState(() {
-                            widget.selectedDevIcons.remove(icon);
-                            widget.onIconsSelected(widget.selectedDevIcons);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: widget.selectedDevIcons.map((icon) {
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          DevIconsUtils.getDevIconFromString(icon),
+                          size: 40,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        const SizedBox(height: 4),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              widget.selectedDevIcons.remove(icon);
+                              widget.onIconsSelected(widget.selectedDevIcons);
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .error
+                                  .withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '제거',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
       ],
     );

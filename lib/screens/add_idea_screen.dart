@@ -21,6 +21,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
 
   final List<String> predefinedCategories = [
     '모바일 앱',
+    '데스크탑 프로그램',
     '웹',
     '백엔드',
     '프론트엔드',
@@ -47,6 +48,10 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
   }
 
   void _saveIdea() {
+    if (textController.text.isEmpty || selectedCategory.isEmpty) {
+      _showValidationDialog();
+      return;
+    }
     final ideasController = Get.find<IdeasController>();
 
     final idea = IdeaModel(
@@ -54,7 +59,6 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       title: textController.text.trim(),
       description: descriptionController.text.trim(),
       category: selectedCategory,
-      createdAt: DateTime.now(),
       isFavorite: widget.initialIdea?.isFavorite ?? false,
       icons: selectedDevIcons, // 여러 아이콘 저장
     );
@@ -66,6 +70,26 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
     }
 
     Get.back(); // Return to previous screen
+  }
+
+  void _showValidationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('입력 오류'),
+          content: const Text('아이디어 제목과 카테고리를 입력한 후 \n추가 버튼을 눌러주세요.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('확인'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -91,7 +115,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 16.0),
             child: ElevatedButton(
               onPressed: _saveIdea,
               style: ElevatedButton.styleFrom(
@@ -119,7 +143,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildSectionTitle(context, '아이디어 제목'),
+              _buildSectionTitle(context, '아이디어 제목 (필수)'),
               _buildAnimatedTextField(
                 controller: textController,
                 hintText: '핵심 기능이나 목적을 한 문장으로 요약해 주세요.',
@@ -129,15 +153,15 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
               _buildSectionTitle(context, '상세 설명'),
               _buildAnimatedTextField(
                 controller: descriptionController,
-                hintText: '아이디어의 구체적인 내용을 설명해 주세요',
+                hintText: '아이디어의 구체적인 내용을 설명해 주세요.',
                 maxLines: 4,
                 context: context,
               ),
               const SizedBox(height: 16),
-              _buildSectionTitle(context, '카테고리'),
+              _buildSectionTitle(context, '카테고리 (필수)'),
               _buildCategoryDropdown(context),
               const SizedBox(height: 16),
-              _buildSectionTitle(context, '기술 아이콘'),
+              _buildSectionTitle(context, '개발 언어'),
               DevIconPicker(
                 selectedDevIcons: selectedDevIcons,
                 onIconsSelected: (icons) {
