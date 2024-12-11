@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wayhow/controllers/ideas_controller.dart';
 import 'package:wayhow/models/idea_model.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/core_features.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/dev_icon_picker.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/idea_description.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/section_title.dart';
@@ -22,6 +23,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
   late TextEditingController descriptionController;
   String selectedCategory = '';
   List<String> selectedDevIcons = [];
+  List<String> coreFeatures = [];
 
   final List<String> predefinedCategories =
       predefined_categories.predefinedCategories;
@@ -36,6 +38,7 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
     );
     selectedCategory = widget.initialIdea?.category ?? '';
     selectedDevIcons = widget.initialIdea?.icons ?? [];
+    coreFeatures = widget.initialIdea?.coreFeatures ?? [];
   }
 
   void _saveIdea() {
@@ -52,6 +55,8 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       category: selectedCategory,
       isFavorite: widget.initialIdea?.isFavorite ?? false,
       icons: selectedDevIcons,
+      coreFeatures:
+          coreFeatures.where((feature) => feature.trim().isNotEmpty).toList(),
     );
 
     if (widget.initialIdea == null) {
@@ -145,6 +150,16 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
                 controller: descriptionController,
                 hintText: '아이디어의 구체적인 내용을 설명해 주세요.',
                 maxLines: 4,
+              ),
+              const SizedBox(height: 16),
+              const SectionTitle(title: '핵심 기능'),
+              CoreFeaturesInput(
+                features: coreFeatures,
+                onFeaturesChanged: (features) {
+                  setState(() {
+                    coreFeatures = features;
+                  });
+                },
               ),
               const SizedBox(height: 16),
               const SectionTitle(title: '카테고리 (필수)'),

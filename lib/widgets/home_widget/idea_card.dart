@@ -66,7 +66,51 @@ class IdeaCard extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 2),
+                        if (idea.coreFeatures.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: idea.coreFeatures
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                int idx = entry.key;
+                                String feature = entry.value;
+                                if (feature.trim().isEmpty) {
+                                  return const SizedBox.shrink();
+                                }
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${idx + 1}. ',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          feature,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(0.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        const SizedBox(height: 2),
                         Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context)

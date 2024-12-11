@@ -6,6 +6,7 @@ class IdeaModel {
   final List<String> tags;
   final bool isFavorite;
   final List<String> icons;
+  final List<String> coreFeatures;
 
   IdeaModel({
     required this.id,
@@ -15,6 +16,7 @@ class IdeaModel {
     this.tags = const [],
     this.isFavorite = false,
     this.icons = const [],
+    required this.coreFeatures,
   });
 
   // Create a copy of the idea with optional modifications
@@ -26,6 +28,7 @@ class IdeaModel {
     List<String>? tags,
     bool? isFavorite,
     List<String>? icons,
+    List<String>? coreFeatures,
   }) {
     return IdeaModel(
       id: id ?? this.id,
@@ -35,6 +38,7 @@ class IdeaModel {
       tags: tags ?? this.tags,
       isFavorite: isFavorite ?? this.isFavorite,
       icons: icons ?? this.icons,
+      coreFeatures: coreFeatures ?? this.coreFeatures,
     );
   }
 
@@ -48,6 +52,7 @@ class IdeaModel {
       'tags': tags,
       'isFavorite': isFavorite,
       'icons': icons,
+      'coreFeatures': coreFeatures,
     };
   }
 
@@ -61,6 +66,7 @@ class IdeaModel {
       tags: List<String>.from(json['tags'] ?? []),
       isFavorite: json['isFavorite'] ?? false,
       icons: List<String>.from(json['icons'] ?? []),
+      coreFeatures: List<String>.from(json['coreFeatures'] ?? []),
     );
   }
 }

@@ -62,7 +62,7 @@ class LeftDrawerWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'v1.0.4',
+                      'v1.0.5',
                       style: TextStyle(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         fontSize: 16,
