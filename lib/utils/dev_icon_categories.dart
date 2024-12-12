@@ -32,6 +32,7 @@ Map<String, List<String>> devIconCategories = {
     'css3Plain',
     'sassOriginal',
     'bootstrapPlain'
+        'gulpPlain',
   ],
   'Web Backend': [
     'nodejsPlain',
@@ -54,7 +55,8 @@ Map<String, List<String>> devIconCategories = {
     'mysqlPlain',
     'postgresqlPlain',
     'mongodbPlain',
-    'firebasePlain'
+    'firebasePlain',
+    'oracleOriginal'
   ],
   'Other Technologies': [
     'electronOriginal',

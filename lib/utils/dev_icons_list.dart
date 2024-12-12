@@ -33,6 +33,7 @@ class DevIconsUtils {
     'swiftPlain', // iOS Development
     'objectivecPlain', // Objective-C
     'nextjsOriginal', // Next.js
+    'gulpPlain', // JavaScript Framework
 
     // Other Popular Languages
     'goPlain', // Systems Programming, Cloud
@@ -51,6 +52,7 @@ class DevIconsUtils {
     'postgresqlPlain', // Advanced Relational Database
     'mongodbPlain', // NoSQL Database
     'firebasePlain', // Backend as a Service
+    'oracleOriginal', // Relational Database
 
     // Other Technologies
     'electronOriginal', // Desktop Apps
@@ -65,6 +67,110 @@ class DevIconsUtils {
     'luaPlain', // Scripting
     'rPlain', // Statistical Computing
   ];
+
+  // 개발 아이콘 이름 매핑
+  static String getDevIconName(String icon) {
+    switch (icon) {
+      case 'flutterPlain':
+        return 'Flutter';
+      case 'reactOriginal':
+        return 'React';
+      case 'angularjsPlain':
+        return 'Angular';
+      case 'vuejsPlain':
+        return 'Vue.js';
+      case 'nodejsPlain':
+        return 'Node.js';
+      case 'pythonPlain':
+        return 'Python';
+      case 'javaPlain':
+        return 'Java';
+      case 'kotlinPlain':
+        return 'Kotlin';
+      case 'swiftPlain':
+        return 'Swift';
+      case 'javascriptPlain':
+        return 'JavaScript';
+      case 'typescriptPlain':
+        return 'TypeScript';
+      case 'goPlain':
+        return 'Go';
+      case 'rustPlain':
+        return 'Rust';
+      case 'dartPlain':
+        return 'Dart';
+      case 'cPlain':
+        return 'C';
+      case 'cplusplusPlain':
+        return 'C++';
+      case 'csharpPlain':
+        return 'C#';
+      case 'phpPlain':
+        return 'PHP';
+      case 'rubyPlain':
+        return 'Ruby';
+      case 'perlPlain':
+        return 'Perl';
+      case 'mysqlPlain':
+        return 'MySQL';
+      case 'postgresqlPlain':
+        return 'PostgreSQL';
+      case 'mongodbPlain':
+        return 'MongoDB';
+      case 'firebasePlain':
+        return 'Firebase';
+      case 'electronOriginal':
+        return 'Electron';
+      case 'html5Plain':
+        return 'HTML5';
+      case 'css3Plain':
+        return 'CSS3';
+      case 'sassOriginal':
+        return 'Sass';
+      case 'bootstrapPlain':
+        return 'Bootstrap';
+      case 'figmaPlain':
+        return 'Figma';
+      case 'luaPlain':
+        return 'Lua';
+      case 'nestjsPlain':
+        return 'NestJS';
+      case 'expressOriginal':
+        return 'Express';
+      case 'djangoPlain':
+        return 'Django';
+      case 'laravelPlain':
+        return 'Laravel';
+      case 'springPlain':
+        return 'Spring';
+      case 'rPlain':
+        return 'R';
+      case 'matlabPlain':
+        return 'MATLAB';
+      case 'groovyPlain':
+        return 'Groovy';
+      case 'flaskOriginal':
+        return 'Flask';
+      case 'objectivecPlain':
+        return 'Objective-C';
+      case 'scalaPlain':
+        return 'Scala';
+      case 'nextjsOriginal':
+        return 'Next.js';
+      case 'photoshopPlain':
+        return 'Photoshop';
+      case 'illustratorPlain':
+        return 'Illustrator';
+      case 'xdPlain':
+        return 'Adobe XD';
+      case 'gulpPlain':
+        return 'Gulp';
+      case 'oracleOriginal':
+        return 'Oracle Database';
+      default:
+        return 'Unknown';
+    }
+  }
 
   static IconData getDevIconFromString(String icon) {
     switch (icon) {
@@ -160,6 +266,10 @@ class DevIconsUtils {
         return DevIcons.illustratorPlain;
       case 'xdPlain':
         return DevIcons.xdPlain;
+      case 'gulpPlain':
+        return DevIcons.gulpPlain;
+      case 'oracleOriginal':
+        return DevIcons.oracleOriginal;
       default:
         return Icons.code;
     }

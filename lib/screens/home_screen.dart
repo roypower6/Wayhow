@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     void showFilterBottomSheet() {
       showModalBottomSheet(
         context: context,
-        builder: (context) => FilterBottomSheet(),
+        builder: (context) => const FilterBottomSheet(),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),

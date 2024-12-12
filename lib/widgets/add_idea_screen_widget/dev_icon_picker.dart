@@ -39,7 +39,7 @@ class DevIconPickerState extends State<DevIconPicker> {
           snap: true,
           initialChildSize: 0.6,
           minChildSize: 0.6,
-          maxChildSize: 0.6,
+          maxChildSize: 0.9,
           builder: (context, scrollController) {
             return Container(
               decoration: BoxDecoration(
@@ -125,60 +125,90 @@ class DevIconPickerState extends State<DevIconPicker> {
 
                       // Icons Grid
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: GridView.builder(
-                            controller: scrollController,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 5,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 15,
-                              mainAxisSpacing: 15,
-                            ),
-                            itemCount: categoryIcons.length,
-                            itemBuilder: (context, index) {
-                              final icon = categoryIcons[index];
-                              final isSelected =
-                                  selectedDevIcons.contains(icon);
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    if (isSelected) {
-                                      selectedDevIcons.remove(icon);
-                                    } else {
-                                      selectedDevIcons.add(icon);
-                                    }
-                                    widget.onIconsSelected(selectedDevIcons);
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.1)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (scrollNotification) {
+                            // 스크롤이 끝에 도달했을 때 상위 DraggableScrollableSheet의 드래그를 활성화
+                            if (scrollNotification is ScrollEndNotification) {
+                              return true;
+                            }
+                            // 스크롤 중일 때는 상위 드래그를 비활성화
+                            return false;
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GridView.builder(
+                              controller: scrollController,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: 0.85,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                              ),
+                              itemCount: categoryIcons.length,
+                              itemBuilder: (context, index) {
+                                final icon = categoryIcons[index];
+                                final isSelected =
+                                    selectedDevIcons.contains(icon);
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (isSelected) {
+                                        selectedDevIcons.remove(icon);
+                                      } else {
+                                        selectedDevIcons.add(icon);
+                                      }
+                                      widget.onIconsSelected(selectedDevIcons);
+                                    });
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInOut,
+                                    decoration: BoxDecoration(
                                       color: isSelected
-                                          ? Theme.of(context).primaryColor
-                                          : Colors.transparent,
-                                      width: 2,
+                                          ? Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.1)
+                                          : null,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? Theme.of(context).primaryColor
+                                            : Colors.grey.withOpacity(0.3),
+                                        width: isSelected ? 2 : 1,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          DevIconsUtils.getDevIconFromString(
+                                              icon),
+                                          size: 32,
+                                          color: isSelected
+                                              ? Theme.of(context).primaryColor
+                                              : null,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          DevIconsUtils.getDevIconName(icon),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: isSelected
+                                                ? Theme.of(context).primaryColor
+                                                : null,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Icon(
-                                    DevIconsUtils.getDevIconFromString(icon),
-                                    size: 50,
-                                    color: isSelected
-                                        ? Theme.of(context).primaryColor
-                                        : Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(0.6),
-                                  ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
