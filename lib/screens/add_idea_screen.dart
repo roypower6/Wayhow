@@ -4,6 +4,7 @@ import 'package:wayhow/controllers/ideas_controller.dart';
 import 'package:wayhow/models/idea_model.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/core_features.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/dev_icon_picker.dart';
+import 'package:wayhow/widgets/add_idea_screen_widget/essential_mark.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/idea_description.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/section_title.dart';
 import 'package:wayhow/widgets/add_idea_screen_widget/category_dropdown.dart';
@@ -73,8 +74,11 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('입력 오류'),
-          content: const Text('아이디어 제목과 카테고리를 입력한 후 \n추가 버튼을 눌러주세요.'),
+          title: const Text('아이디어 추가 실패'),
+          content: const Text('아이디어 제목과 카테고리를 입력한 후 \n추가 버튼을 눌러주세요.',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              )),
           actions: <Widget>[
             TextButton(
               child: const Text('확인'),
@@ -139,7 +143,13 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SectionTitle(title: '아이디어 제목 (필수)'),
+              const Row(
+                children: [
+                  EssentialMark(title: '*'),
+                  SizedBox(width: 4),
+                  SectionTitle(title: '아이디어 제목'),
+                ],
+              ),
               IdeaDescription(
                 controller: textController,
                 hintText: '핵심 기능이나 목적을 한 문장으로 요약해 주세요.',
@@ -162,7 +172,13 @@ class AddIdeaScreenState extends State<AddIdeaScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const SectionTitle(title: '카테고리 (필수)'),
+              const Row(
+                children: [
+                  EssentialMark(title: '*'),
+                  SizedBox(width: 4),
+                  SectionTitle(title: '카테고리'),
+                ],
+              ),
               CategoryDropdown(
                 selectedCategory:
                     selectedCategory.isEmpty ? null : selectedCategory,
